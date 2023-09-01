@@ -1,8 +1,6 @@
-
-using Infrastructure.Data;
 using Core.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Core.Interfaces;
 
 namespace API.Controllers
 {
@@ -10,19 +8,18 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly StoreContext ctx;
+        private readonly IProductRepository repo;
 
-        public ProductsController(StoreContext context) 
+        public ProductsController(IProductRepository repository) 
         {  
-            ctx = context;
+            repo = repository;
         }
 
         [HttpGet]
-        //[HttpGet("getproducts")]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            var products = await ctx.Products.ToListAsync();
-
+            var products = await repo.GetProductsAsync(); 
+            
             if(products.Count == 0){
                 return NoContent();
             }
@@ -34,7 +31,9 @@ namespace API.Controllers
         //[HttpGet("getproduct/{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id){
 
-            var product = await ctx.Products.Where(p=>p.Id==id).FirstOrDefaultAsync();
+            var product = await repo.GetProductByIdAsync(id);
+            
+            //ctx.Products.Where(p=>p.Id==id).FirstOrDefaultAsync();
 
             if(product == null)
             {
@@ -42,6 +41,58 @@ namespace API.Controllers
             }
 
             return Ok(product);
+        }
+
+        //[HttpGet]
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
+        {
+            var productTypes = await repo.GetProductTypesAsync(); 
+            
+            if(productTypes.Count == 0){
+                return NoContent();
+            }
+
+            return Ok(productTypes);
+        }
+
+        [HttpGet("types/{id}")]
+        public async Task<ActionResult<ProductType>> GetProductType(int id){
+
+            var productType = await repo.GetProductTypeByIdAsync(id);
+            
+            if(productType == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(productType);
+        }
+
+        //[HttpGet]
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductBrands()
+        {
+            var productBrands = await repo.GetProductBrandsAsync(); 
+            
+            if(productBrands.Count == 0){
+                return NoContent();
+            }
+
+            return Ok(productBrands);
+        }
+
+        [HttpGet("brands/{id}")]
+        public async Task<ActionResult<ProductBrand>> GetProductBrand(int id){
+
+            var productBrand = await repo.GetProductBrandByIdAsync(id);
+            
+            if(productBrand == null)
+            {
+                return NoContent();
+            }
+
+            return Ok(productBrand);
         }
     }
 }
