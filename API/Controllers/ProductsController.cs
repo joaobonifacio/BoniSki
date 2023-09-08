@@ -6,6 +6,7 @@ using Core.Specifications;
 using API.DTOs;
 using AutoMapper;
 using API.Errors;
+using API.Helpers;
 
 namespace API.Controllers
 {
@@ -15,11 +16,14 @@ namespace API.Controllers
         private readonly IGenericRepository<ProductType> productTypeRepo; 
         private readonly IGenericRepository<ProductBrand> productBrandRepo;
         private readonly IMapper mapper;
+        private readonly ILogger<Product> _logger;
+
 
         public ProductsController(IGenericRepository<Product> productRepository, 
         IGenericRepository<ProductType> productTypeRepository, 
         IGenericRepository<ProductBrand> productBrandRepository,
-        IMapper imapper) 
+        IMapper imapper,
+        ILogger<Product> logger) 
         {  
             productRepo = productRepository;
             productTypeRepo = productTypeRepository;
@@ -27,33 +31,65 @@ namespace API.Controllers
             mapper = imapper; 
         }
 
+        // [HttpGet]
+        // public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts()
+        // {   
+        //     var spec = new ProductsWithTypesAndBrandsSpecification();
+
+        //     //Este método já o novo que criámos no generic repository
+        //     var products = await productRepo.ListAsync(spec); 
+            
+        //     if(products.Count == 0){
+        //         return NoContent();
+        //     }
+
+        //     var mappedProducts = mapper.Map<IReadOnlyList<Product>, 
+        //         IReadOnlyList<ProductToReturnDTO>>(products);
+
+        //     return Ok(mappedProducts);
+
+        //     // return Ok(products.Select(p=> new ProductToReturnDTO()
+        //     // {
+        //     //     Id = p.Id,
+        //     //     Description = p.Description,
+        //     //     Name = p.Name,
+        //     //     Price = p.Price,
+        //     //     ProductBrand = p.ProductBrand.Name,
+        //     //     ProductType = p.ProductType.Name
+        //     //     //PictureUrl = product.PictureUrl
+        //     // }).ToList());
+        // }
+
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts()
+        public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProducts(
+            [FromQuery] ProductSpecParams productSpecParams)
         {   
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+
+            var countSpec = new ProductWithFiltersForCountSpecification(productSpecParams);
+
+            var totalItems = await productRepo.CountAsync(countSpec);
 
             //Este método já o novo que criámos no generic repository
+            var spec = new ProductsWithTypesAndBrandsSpecification(productSpecParams);
+
             var products = await productRepo.ListAsync(spec); 
+
+            var data = mapper.Map<IReadOnlyList<Product>, 
+                IReadOnlyList<ProductToReturnDTO>>(products);
             
             if(products.Count == 0){
                 return NoContent();
             }
 
-            var mappedProducts = mapper.Map<IReadOnlyList<Product>, 
-                IReadOnlyList<ProductToReturnDTO>>(products);
+            Pagination<ProductToReturnDTO> pagination = new Pagination<ProductToReturnDTO>
+            (productSpecParams.PageIndex, productSpecParams.PageSize, totalItems, data);
 
-            return Ok(mappedProducts);
+            // Add CORS headers for inspection
+        Response.Headers.Add("Access-Control-Allow-Origin", "*");
+        Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-            // return Ok(products.Select(p=> new ProductToReturnDTO()
-            // {
-            //     Id = p.Id,
-            //     Description = p.Description,
-            //     Name = p.Name,
-            //     Price = p.Price,
-            //     ProductBrand = p.ProductBrand.Name,
-            //     ProductType = p.ProductType.Name
-            //     //PictureUrl = product.PictureUrl
-            // }).ToList());
+            return Ok(pagination);
         }
 
         [HttpGet("{id}")]
@@ -73,17 +109,6 @@ namespace API.Controllers
             var mappedProduct = mapper.Map<Product, ProductToReturnDTO>(product);
 
             return Ok(mappedProduct);
-
-            // return Ok(new ProductToReturnDTO()
-            // {
-            //     Id = product.Id,
-            //     Description = product.Description,
-            //     Name = product.Name,
-            //     Price = product.Price,
-            //     ProductBrand = product.ProductBrand.Name,
-            //     ProductType = product.ProductType.Name
-            //     //PictureUrl = product.PictureUrl
-            // });
         }
 
         //[HttpGet]

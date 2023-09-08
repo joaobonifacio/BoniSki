@@ -17,6 +17,24 @@ namespace Infrastructure.Data
                 query = query.Where(spec.Criteria);
             }
 
+            //Agora para os OrderBy
+            if(spec.OrderBy != null)
+            {
+                //OrderBy = x=>x.Name || x=>x.Price
+                query = query.OrderBy(spec.OrderBy);
+            }
+
+            if(spec.OrderByDescending != null)
+            {
+                //OrderBy = x=>x.Name || x=>x.Price
+                query = query.OrderByDescending(spec.OrderByDescending);
+            }
+
+            if(spec.IsPagingEnabled)
+            {
+                query = query.Skip(spec.Skip).Take(spec.Take);
+            }
+            
             //Aqui dizemos-lhe o que incluir
             query = spec.Includes.Aggregate(query,(current, include) => current.Include(include));
 

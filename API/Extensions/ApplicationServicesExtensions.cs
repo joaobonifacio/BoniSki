@@ -16,6 +16,7 @@ namespace API.Extensions
             IConfiguration config)
         {
             services.AddEndpointsApiExplorer();
+
             services.AddSwaggerGen();
 
             services.AddDbContext<StoreContext>(opt => 
@@ -48,6 +49,14 @@ namespace API.Extensions
 
                     return new BadRequestObjectResult(errorResponse);
                 };
+            });
+
+            services.AddCors(opt=>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
             });
 
             return services;    

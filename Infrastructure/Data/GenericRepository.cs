@@ -37,6 +37,11 @@ namespace Infrastructure.Data
              return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
 
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
+
         //Se o ProductRepository chamar o Generic e lhe passar Product, ctx=ctx.Products
         private IQueryable<T> ApplySpecification(ISpecification<T> specification)
         {
