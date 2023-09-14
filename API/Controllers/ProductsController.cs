@@ -79,6 +79,10 @@ namespace API.Controllers
             
             if(products.Count == 0){
                 return NoContent();
+            //     Pagination<ProductToReturnDTO> paginationNone = new Pagination<ProductToReturnDTO>
+            // (0, 1, 0, null);
+
+            //     return Ok(paginationNone);
             }
 
             Pagination<ProductToReturnDTO> pagination = new Pagination<ProductToReturnDTO>
