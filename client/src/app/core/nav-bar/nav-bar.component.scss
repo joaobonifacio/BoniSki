@@ -1,4 +1,4 @@
-.cart-no{
+.cart-no {
     position: absolute;
     width: 20px;
     height: 20px;
@@ -11,4 +11,17 @@
     line-height: 20px;
     top: -10px;
     right: 37px;
+}
+
+a {
+    text-decoration: none;
+    color: #343a40;
+
+    &.active {
+        color: orange;
+    }
+}
+
+.logo {
+    cursor: pointer;
 }
