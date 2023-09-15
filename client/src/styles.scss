@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-snack-bar-container {
+    top: 100px; /* Adjust the value to your preferred position in pixels */
+    transform: translateY(-50%) !important;
+  }
+
+  .cdk-global-overlay-wrapper .mat-snack-bar-container {
+    position: fixed;
+    top: 40%; /* Adjust the vertical position as needed */
+    left: 50%;
+    transform: translateX(-50%);
+  }
