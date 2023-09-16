@@ -6,6 +6,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ServerErrorComponent } from './server-error/server-error.component';
 import { CommonModule } from '@angular/common';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SectionHeaderComponent } from './section-header/section-header.component';
+import { BreadcrumbModule } from 'xng-breadcrumb';
 
 
 @NgModule({
@@ -14,14 +16,17 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     TestErrorComponent,
     NotFoundComponent,
     ServerErrorComponent,
+    SectionHeaderComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    BreadcrumbModule
   ],
   exports: [
-    NavBarComponent
+    NavBarComponent,
+    SectionHeaderComponent
   ]
 })
 export class CoreModule { }
