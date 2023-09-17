@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Errors;
 using Core.Interfaces;
+using Infrastructure;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API.Extensions
 {
@@ -24,7 +26,18 @@ namespace API.Extensions
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
 
+            //Redis
+            services.AddSingleton<IConnectionMultiplexer>(c => {
+                var options = ConfigurationOptions.Parse(
+                    config.GetConnectionString("Redis"));
+                
+                return ConnectionMultiplexer.Connect(options);
+            });
+
             services.AddScoped<IProductRepository, ProductRepository>(); 
+
+            //Declarar o interface e repositório basket
+            services.AddScoped<IBasketRepository, BasketRepository>(); 
 
             //Declarar o serviço genérico
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); 
