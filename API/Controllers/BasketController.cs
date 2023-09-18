@@ -29,7 +29,7 @@ namespace API.Controllers
                 return new CustomerBasket(id);
             }
 
-            //O ?? verifica se basket é null, se não for devolve basket, else new etc
+            //O ?? verifica se basket é null, se não for devolve basket, else new basket
             return Ok(basket);
         }
 
