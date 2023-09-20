@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Errors;
 using Core.Interfaces;
 using Infrastructure;
@@ -34,10 +30,14 @@ namespace API.Extensions
                 return ConnectionMultiplexer.Connect(options);
             });
 
-            services.AddScoped<IProductRepository, ProductRepository>(); 
-
             //Declarar o interface e repositório basket
             services.AddScoped<IBasketRepository, BasketRepository>(); 
+            
+            //Declarar o interface e repositório product
+            services.AddScoped<IProductRepository, ProductRepository>(); 
+
+            //Declarar o serviço token
+            services.AddScoped<ITokenService, TokenService>();
 
             //Declarar o serviço genérico
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); 

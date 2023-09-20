@@ -1,20 +1,26 @@
 using API.Errors;
 using API.Extensions;
 using API.Middleware;
+using Core.Entities.Identity;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add services to the container
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
+//EXTENSION a Program
+//AddApplicationServices é um método de ApplicationServicesExtension
 builder.Services.AddApplicationServices(builder.Configuration);
+
+//EXTENSIONS para Identity
+builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -38,6 +44,7 @@ app.UseStaticFiles();
 //Sempre antes de UseAuthorization
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers(); //este é o dele
@@ -46,15 +53,19 @@ app.MapControllers(); //este é o dele
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<StoreContext>();
+var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+var userManager = services.GetRequiredService<UserManager<AppUser>>();
 var logger = services.GetRequiredService<ILogger<Program>>();
 
 //E aqui é que vamos tentar migrar a DB
 try
 {
     await context.Database.MigrateAsync();
+    await identityContext.Database.MigrateAsync();
 
     //Este é o método para popular a DB
     await StoreContextSeed.SeedAsync(context);
+    await AppIdentityDbContextSeed.SeedUserAsync(userManager);
 }
 catch (Exception ex)
 {
@@ -62,3 +73,5 @@ catch (Exception ex)
 }
 
 app.Run();
+
+
