@@ -22,6 +22,9 @@ builder.Services.AddApplicationServices(builder.Configuration);
 //EXTENSIONS para Identity
 builder.Services.AddIdentityServices(builder.Configuration);
 
+//Swagger
+builder.Services.AddSwaggerDocumentation();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,11 +32,13 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwaggerDocumentation();
+
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
 
 app.UseStaticFiles();
 
