@@ -115,7 +115,7 @@ namespace API.Controllers
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
-        {
+        {            
             //Check if email already exists, if it does, return bad request
             if(CheckEmailExistsAsync(registerDTO.Email).Result.Value)
             {

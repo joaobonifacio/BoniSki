@@ -27,8 +27,40 @@
             <div *ngIf="(basketService.basketSource$ | async) as basket" 
             class="cart-no">{{ getCount(basket.items) }}</div>
         </a>    
-            <a href="#" class="btn btn-outline-secondary me-2">Login</a>
-            <a href="#" class="btn btn-outline-secondary">Sign Up</a>
+        <ng-container *ngIf="(accountService.currentUser$ | async) == null">
+            <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
+            <a routerLink="/account/register" class="btn btn-outline-secondary">Sign Up</a>
+        </ng-container>
+
+        <ng-container *ngIf="(accountService.currentUser$ | async) as user">
+            <div class="dropdown ms-2 me-5" style="cursor: pointer;" dropdown>
+                <a dropdownToggle class="dropdown-toggle">
+                    <strong>Welcome {{ user.displayName }}</strong>
+                </a>
+                <ul *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                    style="width: 35px; height: 125px;">
+                    <li style="margin-left: 20px; margin-top: 5px; margin-bottom: 10px;">
+                        <a routerLink="/basket" class="dropdoown-item">
+                            <i class="fa fa-shopping-cart">View Basket</i>
+                        </a>
+                    </li>
+                    <li style="margin-left: 20px; margin-top: 10px; margin-bottom: 5px;">
+                        <a routerLink="/orders" class="dropdoown-item">
+                            <i class="fa fa-history">View Orders</i>
+                        </a>
+                    </li>
+                    <!-- <li class="dropdwon-divider" style="color: black;"></li> -->
+                    <li>
+                        <hr style="color: black;">
+                    </li>
+                    <li style="margin-left: 20px;">
+                        <a (click)="accountService.logOut()" class="dropdoown-item">
+                            <i class="fa fa-sign-out">Logout</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </ng-container>
     </div>
 
 </header>
