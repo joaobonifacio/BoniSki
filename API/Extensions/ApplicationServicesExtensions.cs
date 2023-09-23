@@ -2,6 +2,7 @@ using API.Errors;
 using Core.Interfaces;
 using Infrastructure;
 using Infrastructure.Data;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -30,14 +31,20 @@ namespace API.Extensions
                 return ConnectionMultiplexer.Connect(options);
             });
 
+            //Declarar o serviço token
+            services.AddScoped<ITokenService, TokenService>();
+
+            //Declarar o serviço order
+            services.AddScoped<IOrderService, OrderService>();
+
+            //Declarar o serviço unit of work
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             //Declarar o interface e repositório basket
             services.AddScoped<IBasketRepository, BasketRepository>(); 
             
             //Declarar o interface e repositório product
             services.AddScoped<IProductRepository, ProductRepository>(); 
-
-            //Declarar o serviço token
-            services.AddScoped<ITokenService, TokenService>();
 
             //Declarar o serviço genérico
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); 
