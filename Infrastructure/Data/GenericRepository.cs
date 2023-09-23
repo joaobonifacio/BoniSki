@@ -49,5 +49,21 @@ namespace Infrastructure.Data
             //O T será, por exemplo Product
             return SpecificationEvaluator<T>.GetQuery(ctx.Set<T>().AsQueryable(), specification);
         }
+
+        public void Add(T entity)
+        {
+            ctx.Set<T>().Add(entity);
+        }
+
+        public void Update(T entity)
+        {
+            ctx.Set<T>().Attach(entity);
+            ctx.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Delete(T entity)
+        {
+            ctx.Set<T>().Remove(entity);
+        }
     }
 }

@@ -7,6 +7,14 @@ namespace Core.Specifications
 {
     public class ProductsWithTypesAndBrandsSpecification : BaseSpecification<Product>
     {
+        
+        public ProductsWithTypesAndBrandsSpecification(int id) 
+        : base(x=>x.Id==id)
+        {
+            AddInclude(x=>x.ProductType);
+            AddInclude(x=>x.ProductBrand);
+        }
+        
         public ProductsWithTypesAndBrandsSpecification(ProductSpecParams productSpecParams)
         : base(x=>
         ( string.IsNullOrEmpty(productSpecParams.Search) || x.Name.ToLower().Contains(
@@ -36,13 +44,6 @@ namespace Core.Specifications
                         break;
                 }
             }
-        }
-
-        public ProductsWithTypesAndBrandsSpecification(int id) 
-        : base(x=>x.Id==id)
-        {
-            AddInclude(x=>x.ProductType);
-            AddInclude(x=>x.ProductBrand);
         }
     }
 }
