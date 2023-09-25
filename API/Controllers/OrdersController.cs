@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using API.DTOs;
 using API.Errors;
 using API.Extensions;
@@ -10,12 +5,11 @@ using AutoMapper;
 using Core.Entities.OrderAggregate;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+   [Authorize]
     public class OrdersController :BaseAPIController
     {
         private readonly IOrderService orderService;
@@ -27,7 +21,7 @@ namespace API.Controllers
             this.mapper = imapper;
         }
 
-        [HttpPost]
+        [HttpPost("createorder")]
         public async Task<ActionResult<Order>> CreateOrder(OrderDTO orderDTO)
         {
             var email = HttpContext.User.RetrieveEmailFromPrincipal();
