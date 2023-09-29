@@ -15,7 +15,9 @@ export class LoginComponent {
 
   constructor(public accountService: AccountService, private router: Router,
     private activatedRoute: ActivatedRoute){
-      this.returnUrl = activatedRoute.snapshot.queryParams['returnUrl'] || '/shop'
+      this.returnUrl = activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
+      console.log(activatedRoute);
+      console.log(this.returnUrl);
     }
 
   loginForm = new FormGroup ({

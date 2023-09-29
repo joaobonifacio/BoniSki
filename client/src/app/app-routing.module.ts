@@ -14,29 +14,32 @@ const routes: Routes = [
   {path : 'shop', loadChildren: () => import('./shop/shop.module')
     .then(m=>m.ShopModule)},
 
-    {
-      path : 'basket', 
-      //canActivate: [AuthGuard],
-      loadChildren: () => import('./basket/basket.module')
-        .then(m=>m.BasketModule)
-    },
+ {
+    path : 'basket', 
+    //canActivate: [AuthGuard],
+    loadChildren: () => import('./basket/basket.module')
+      .then(m=>m.BasketModule)
+  },
 
-    {
-      path : 'checkout', 
-      canActivate: [AuthGuard],
-      loadChildren: () => import('./checkout/checkout.module')
-        .then(m=>m.CheckoutModule)
-    },
+  {
+    path : 'checkout', 
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./checkout/checkout.module')
+      .then(m=>m.CheckoutModule)
+  },
 
-    {path : 'account', loadChildren: () => import('./account/account.module')
+  {path : 'account', loadChildren: () => import('./account/account.module')
     .then(m=>m.AccountModule)},
 
-    { path: 'test-error', component: TestErrorComponent },
-    { path: 'not-found', component: NotFoundComponent },
-    { path: 'server-error', component: ServerErrorComponent },
+    {path : 'orders', loadChildren: () => import('./orders/orders.module')
+    .then(m=>m.OrdersModule), data: { breadcrumb: 'Orders' }},
 
-      //Esta é para routes que não existem
-    { path: '**', redirectTo: '', pathMatch: 'full' }
+  { path: 'test-error', component: TestErrorComponent },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: 'server-error', component: ServerErrorComponent },
+
+    //Esta é para routes que não existem
+   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({

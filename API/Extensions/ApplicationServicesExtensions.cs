@@ -31,6 +31,15 @@ namespace API.Extensions
                 return ConnectionMultiplexer.Connect(options);
             });
 
+            //Declarar o interface e repositório basket
+            services.AddScoped<IBasketRepository, BasketRepository>(); 
+            
+            //Declarar o interface e repositório product
+            services.AddScoped<IProductRepository, ProductRepository>(); 
+
+            //Declarar serviço Payment 
+            services.AddScoped<IPaymentService, PaymentService>();
+
             //Declarar o serviço token
             services.AddScoped<ITokenService, TokenService>();
 
@@ -39,12 +48,6 @@ namespace API.Extensions
 
             //Declarar o serviço unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            //Declarar o interface e repositório basket
-            services.AddScoped<IBasketRepository, BasketRepository>(); 
-            
-            //Declarar o interface e repositório product
-            services.AddScoped<IProductRepository, ProductRepository>(); 
 
             //Declarar o serviço genérico
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); 

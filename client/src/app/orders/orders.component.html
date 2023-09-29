@@ -1,0 +1,40 @@
+<div class="container">
+    <ng-container *ngIf="orders.length > 0">
+        <div class="container">
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-hover" style="cursor: pointer;">
+                            <thead class="text-uppercase">
+                                <tr>
+                                    <th><div class="py-2">Order</div></th>
+                                    <th><div class="py-2">Date</div></th>
+                                    <th><div class="py-2">Total</div></th>
+                                    <th><div class="py-2">Status</div></th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            <tr *ngFor="let order of orders"
+                            routerLink="/orders/{{order.id}}">
+                                <td class="align-middle">
+                                    <strong>{{order.id}}</strong>
+                                </td>
+                                <td class="align-middle">
+                                    {{order.orderDate | date:'MMM d, y, h:mm:ss a' }}
+                                </td>
+                                <td class="align-middle">
+                                    <strong>{{order.total| currency}}</strong>
+                                </td>
+                                <td class="align-middle">
+                                    {{order.status }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <div *ngIf="orders.length === 0">
+        <p>You have no orders</p>
+    </div>
+</div>

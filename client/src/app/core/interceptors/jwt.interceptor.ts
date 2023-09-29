@@ -20,6 +20,17 @@ export class JwtInterceptor implements HttpInterceptor {
       next: user => this.token = user?.token
     });
 
+    if(this.token == undefined){
+      const token = localStorage.getItem('token');
+
+      if(token === null){
+        this.token = '';
+      }
+      else{
+        this.token = token;
+      }
+    }
+
     if(this.token){
       request = request.clone({
         setHeaders: {

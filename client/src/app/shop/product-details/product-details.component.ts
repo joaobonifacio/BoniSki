@@ -53,13 +53,6 @@ export class ProductDetailsComponent implements OnInit {
       });
   }
 
-  // numberOfProducts(){
-  //   if(!this.product) this.quantityOfItem = 0;
-
-  //   if(this.product != null && this.product != undefined)
-  //   this.quantityOfItem = this.basketService.countItemInBasket(this.product);
-  // }
-
   incrementQuantity(){
     this.quantity++;
   }

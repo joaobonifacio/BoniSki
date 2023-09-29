@@ -23,7 +23,7 @@ namespace Infrastructure.Services
             this.unitOfWork = iunitOfWork;
         }
 
-        public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethod, string basketId, 
+        public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, 
             Address shippingAddress)
         {
             // get basket from basket repo
@@ -45,15 +45,34 @@ namespace Infrastructure.Services
             }
 
             //var method = await deliveryMethodRepo.GetByIdAsync(deliveryMethod);
-            var method = await unitOfWork.Repository<DeliveryMethod>().GetByIdAsync(deliveryMethod);
+            var deliveryMethod = await unitOfWork.Repository<DeliveryMethod>().
+                GetByIdAsync(deliveryMethodId);
 
             //calculate sub total
             var subtotal = items.Sum(item=>item.Price*item.Quantity);
-    
-            //create the order 
-            var order = new Order(items, buyerEmail, shippingAddress, method, subtotal);
-            unitOfWork.Repository<Order>().Add(order);
 
+            //Verificar se temos Order
+            var spec = new OrderByPaymentIntentIdSpecification(basket.PaymentIntentId);
+            var order = await unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if(order != null)
+            {
+                order.ShipToAddress = shippingAddress;
+                order.DeliveryMethod = deliveryMethod;
+                order.SubTotal = subtotal;
+                unitOfWork.Repository<Order>().Update(order);
+
+            }
+            else
+            {
+                //create the order 
+                order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal, 
+                    basket.PaymentIntentId);
+                
+                unitOfWork.Repository<Order>().Add(order);
+
+            }
+            
             //save order to db 
             var result = await unitOfWork.Complete();
 
@@ -62,8 +81,8 @@ namespace Infrastructure.Services
                 return null;
             }
 
-            //Delete basket
-            await basketRepo.DeleteBasketAsync(basket.Id);
+            // //Delete basket
+            // await basketRepo.DeleteBasketAsync(basket.Id);
 
             //return
             return order;

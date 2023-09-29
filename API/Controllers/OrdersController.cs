@@ -39,7 +39,7 @@ namespace API.Controllers
             return Ok(order);
         }
 
-        [HttpGet]
+        [HttpGet("getorders")]
         public async Task<ActionResult<IReadOnlyList<OrderToReturnDTO>>> GetOrdersForUser()
         {
             var email = HttpContext.User.RetrieveEmailFromPrincipal();

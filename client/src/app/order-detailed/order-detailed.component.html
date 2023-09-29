@@ -1,0 +1,85 @@
+<div class="mt-4">
+    <div class="container">
+      <div class="row">
+        <!-- Product Table (8 out of 12 columns) -->
+        <div class="col-md-8">
+          <div class="table-responsive" *ngIf="order">
+            <table class="table">
+              <thead class="text-uppercase bg-light">
+                <tr>
+                  <th><div class="py-2">Product</div></th>
+                  <th><div class="py-2">Price</div></th>
+                  <th><div class="py-2">Quantity</div></th>
+                  <th><div class="py-2">Total</div></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of order.orderItems">
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <!-- Product Information -->
+                      <div class="p-2 d-inline-block">
+                        <img src="{{item.pictureUrl}}" 
+                          alt="{{item.productName}}" 
+                          class="img-fluid"
+                          style="max-height: 50px;">
+                        <div class="ms-3 d-inline-block align-middle">
+                          <h5 class="mb-0">
+                            <a routerLink="/shop/{{item.productId}}"
+                              class="text-dark text-decoration-none">
+                              {{item.productName}}
+                            </a>
+                          </h5>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="ml-4">
+                      <strong>{{item.price | currency}}</strong>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="ml-4">
+                      <strong>{{item.quantity}}</strong>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="ml-4">
+                      <strong>{{item.price * item.quantity | currency}}</strong>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+  
+        <!-- Order Summary (4 out of 12 columns) -->
+        <div class="col-md-4">
+          <div class="bg-light px-4 py-3 text-uppercase fw-bold">
+            Order Summary
+          </div>
+          <div class="p-4">
+            <p class="fst-italic mb-4">Shipping costs will be calculated at check-out</p>
+            <ul class="list-unstyled mb-4" *ngIf="order">
+              <li class="d-flex justify-content-between py-3 border-bottom">
+                <strong class="text-muted">Order SubTotal</strong>
+                <strong>{{order.subTotal | currency}}</strong>
+              </li>
+              <li class="d-flex justify-content-between py-3 border-bottom">
+                <strong class="text-muted">Shipping and Handling</strong>
+                <strong>{{ order.shippingPrice | currency}}</strong>
+              </li>
+              <li class="d-flex justify-content-between py-3 border-bottom">
+                <strong class="text-muted">Total</strong>
+                <strong>{{order.total | currency}}</strong>
+              </li>
+            </ul>
+          </div>
+          <div style="height: 10px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

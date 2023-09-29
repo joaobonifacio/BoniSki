@@ -15,11 +15,13 @@ export interface OrderItem {
 }
 
 export interface Order {
+    forEach(arg0: (element: any) => void): unknown;
     id: number;
     buyerEmail: string;
     orderDate: Date;
     shipToAddress: Address;
     deliveryMethod: string;
+    shippingPrice: number
     orderItems: OrderItem[];
     subTotal: number;
     total: number;

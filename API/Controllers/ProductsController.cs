@@ -31,35 +31,6 @@ namespace API.Controllers
             mapper = imapper; 
         }
 
-        // [HttpGet]
-        // public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts()
-        // {   
-        //     var spec = new ProductsWithTypesAndBrandsSpecification();
-
-        //     //Este método já o novo que criámos no generic repository
-        //     var products = await productRepo.ListAsync(spec); 
-            
-        //     if(products.Count == 0){
-        //         return NoContent();
-        //     }
-
-        //     var mappedProducts = mapper.Map<IReadOnlyList<Product>, 
-        //         IReadOnlyList<ProductToReturnDTO>>(products);
-
-        //     return Ok(mappedProducts);
-
-        //     // return Ok(products.Select(p=> new ProductToReturnDTO()
-        //     // {
-        //     //     Id = p.Id,
-        //     //     Description = p.Description,
-        //     //     Name = p.Name,
-        //     //     Price = p.Price,
-        //     //     ProductBrand = p.ProductBrand.Name,
-        //     //     ProductType = p.ProductType.Name
-        //     //     //PictureUrl = product.PictureUrl
-        //     // }).ToList());
-        // }
-
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProducts(
             [FromQuery] ProductSpecParams productSpecParams)
@@ -79,10 +50,6 @@ namespace API.Controllers
             
             if(products.Count == 0){
                 return NoContent();
-            //     Pagination<ProductToReturnDTO> paginationNone = new Pagination<ProductToReturnDTO>
-            // (0, 1, 0, null);
-
-            //     return Ok(paginationNone);
             }
 
             Pagination<ProductToReturnDTO> pagination = new Pagination<ProductToReturnDTO>
