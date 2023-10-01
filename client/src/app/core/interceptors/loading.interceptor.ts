@@ -18,6 +18,7 @@ export class LoadingInterceptor implements HttpInterceptor {
     if(
       request.url.includes('emailexists')
       || request.method === 'POST' && request.url.includes('orders')
+      || request.method === 'DELETE'
       ){
         return next.handle(request);
     }

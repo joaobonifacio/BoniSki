@@ -5,6 +5,7 @@
             <select class="form-select mb-4"
                 (change)="onSortSelected($event)">
                 <option *ngFor="let sort of sortOptions"
+                    [selected]="shopParams.sort === sort.value"
                     [value]="sort.value">
                     {{ sort.name }}</option>
             </select>

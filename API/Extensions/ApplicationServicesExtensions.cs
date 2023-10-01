@@ -31,6 +31,9 @@ namespace API.Extensions
                 return ConnectionMultiplexer.Connect(options);
             });
 
+            //Declarar o interface e o serviço de caching
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+
             //Declarar o interface e repositório basket
             services.AddScoped<IBasketRepository, BasketRepository>(); 
             
